@@ -1,0 +1,4 @@
+GitHub Pages quick setup:
+Repository Settings > Pages > Deploy from a branch > main > /docs > Save.
+Then open the published HTTPS URL in Safari and Share > Add to Home Screen.
+See README.md for full instructions.
