@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101820">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="style.css">
+<title>SeedCrackerX BE Companion</title>
+</head>
+<body>
+<header><div class="eyebrow">BEDROCK EDITION · COMPANION</div><h1>SeedCrackerX <span>BE</span></h1>
+<p>Exploration notebook · prototype 0.1.0</p></header>
+<main>
+<section class="notice"><b>Important</b><p>This companion does not crack seeds or read Minecraft memory. It records observations you enter manually. Use it alongside Minecraft in Split View or Stage Manager.</p></section>
+<section class="panel">
+<h2>World workspace</h2>
+<label>World / server label<input id="world" placeholder="e.g. Survival world"></label>
+<div class="grid">
+<label>Dimension<select id="dimension"><option>Overworld</option><option>Nether</option><option>End</option></select></label>
+<label>Observation type<select id="kind"><option>Structure</option><option>Biome</option><option>Landmark</option><option>Other</option></select></label>
+</div>
+<div class="grid coords">
+<label>X<input id="x" type="number" inputmode="numeric" placeholder="0"></label>
+<label>Y<input id="y" type="number" inputmode="numeric" placeholder="optional"></label>
+<label>Z<input id="z" type="number" inputmode="numeric" placeholder="0"></label>
+</div>
+<label>Details<textarea id="details" rows="3" placeholder="What did you observe? e.g. desert temple, approximate location, visible clues…"></textarea></label>
+<button id="add">Save observation</button>
+</section>
+<section class="panel">
+<div class="section-head"><h2>Observations</h2><button class="quiet" id="export">Export JSON</button></div>
+<div id="empty" class="empty">No observations yet. Add one while exploring.</div>
+<div id="entries"></div>
+<button class="danger" id="clear">Clear this workspace</button>
+</section>
+<section class="panel">
+<h2>Coordinate tools</h2>
+<p class="muted">Convert coordinates between Overworld and Nether using the standard 8:1 horizontal scale. This is a navigation aid, not a seed-cracking feature.</p>
+<div class="grid">
+<label>Overworld X<input id="owx" type="number" inputmode="decimal" placeholder="0"></label>
+<label>Overworld Z<input id="owz" type="number" inputmode="decimal" placeholder="0"></label>
+</div>
+<button id="convert">Convert to Nether</button>
+<div id="converted" class="result">Enter coordinates to calculate.</div>
+</section>
+<footer>Data stays in this browser on this device. Export backups regularly.</footer>
+</main>
+<script src="app.js"></script>
+</body></html>
