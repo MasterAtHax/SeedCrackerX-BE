@@ -1,0 +1,65 @@
+name: Copy folder contents to root
+
+on:
+  workflow_dispatch:
+    inputs:
+      folder:
+        description: "Repository folder to copy from (for example: unzipped-folder/docs)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  copy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: List root folders
+        run: |
+          echo "Folders at repository root:"
+          find . -mindepth 1 -maxdepth 1 -type d \
+            ! -name .git -printf '%f\n' | sort
+
+      - name: Copy selected folder to root
+        env:
+          SOURCE: ${{ inputs.folder }}
+        run: |
+          set -euo pipefail
+
+          # Reject absolute paths and paths that could escape the repository.
+          if [[ "$SOURCE" = /* || "$SOURCE" == *".."* ]]; then
+            echo "Invalid folder path."
+            exit 1
+          fi
+          if [[ ! -d "$SOURCE" ]]; then
+            echo "Folder not found: $SOURCE"
+            exit 1
+          fi
+
+          # Refuse to overwrite anything already at the root.
+          for item in "$SOURCE"/* "$SOURCE"/.[!.]* "$SOURCE"/..?*; do
+            [[ -e "$item" ]] || continue
+            name=$(basename "$item")
+            if [[ -e "$name" ]]; then
+              echo "Stopped: '$name' already exists at the repository root."
+              exit 1
+            fi
+          done
+
+          cp -a "$SOURCE"/. .
+          echo "Copied contents of '$SOURCE' to the repository root."
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Copy selected folder contents to repository root"
+            git push
+          fi
